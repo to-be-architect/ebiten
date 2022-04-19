@@ -51,10 +51,6 @@ static GLFWerrorfun _glfwErrorCallback;
 static _GLFWinitconfig _glfwInitHints =
 {
     GLFW_TRUE,      // hat buttons
-    {
-        GLFW_TRUE,  // macOS menu bar
-        GLFW_TRUE   // macOS bundle chdir
-    }
 };
 
 // Terminate the library
@@ -82,10 +78,6 @@ static void terminate(void)
     free(_glfw.monitors);
     _glfw.monitors = NULL;
     _glfw.monitorCount = 0;
-
-    free(_glfw.mappings);
-    _glfw.mappings = NULL;
-    _glfw.mappingCount = 0;
 
     _glfwPlatformTerminate();
 
@@ -243,7 +235,6 @@ GLFWAPI int glfwInit(void)
     _glfwPlatformSetTls(&_glfw.errorSlot, &_glfwMainThreadError);
 
     _glfw.initialized = GLFW_TRUE;
-    _glfw.timer.offset = _glfwPlatformGetTimerValue();
 
     glfwDefaultWindowHints();
     return GLFW_TRUE;
@@ -259,16 +250,6 @@ GLFWAPI void glfwTerminate(void)
 
 GLFWAPI void glfwInitHint(int hint, int value)
 {
-    switch (hint)
-    {
-        case GLFW_COCOA_CHDIR_RESOURCES:
-            _glfwInitHints.ns.chdir = value;
-            return;
-        case GLFW_COCOA_MENUBAR:
-            _glfwInitHints.ns.menubar = value;
-            return;
-    }
-
     _glfwInputError(GLFW_INVALID_ENUM,
                     "Invalid init hint 0x%08X", hint);
 }
